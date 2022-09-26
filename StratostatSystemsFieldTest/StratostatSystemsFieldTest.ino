@@ -3,6 +3,8 @@
 #include "Indications.h"
 #include "ThermoRegulation.h"
 
+ThermoRegulator thermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C);
+
 void setup() {
   Serial.begin(3600);
   delay(50);
@@ -18,4 +20,5 @@ void setup() {
 
 void loop() {
   indicate();
+  thermoRegulator.regulate();
 }

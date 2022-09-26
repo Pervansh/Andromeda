@@ -10,6 +10,9 @@
 // Кол-во светодиодов
 PARAMETER(LED_COUNT, 3)
 PARAMETER(THERMOREGULATION_LED_ID, 0)
+PARAMETER(NEEDED_THERMOREGULATOR_TEMP_C, 80.0)
+
+PARAMETER(LOG_MAX_COLUMNS, 10);
 
 // Задание массивов ARRAY(*имя массива*, *тип элементов массива*, *кол-во элементов*, DATA(*элементы через запятую*))
 ARRAY(PID_COEFFICIENTS, float, 3, DATA(1, 2, 3))

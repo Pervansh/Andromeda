@@ -15,12 +15,16 @@ private:
   bool isTurnedOn;
 
 public:
-  ThermoRegulator();
+  ThermoRegulator(float neededTempC);
 
   void regulate();
 
   void turnOn ();
   void turnOff();
+
+  void changeNeededTemperature(float tempC);
+
+  ~ThermoRegulator();
 };
 
 #endif  // THERMO_REGULATION_H

@@ -3,7 +3,7 @@
 
 #include "config.h"
 
-ThermoRegulator::ThermoRegulator() {
+ThermoRegulator::ThermoRegulator(float neededTempC) {
   pid.setLimits(0, 255);
 
   pinMode(THERMOREGULATOR_PIN, OUTPUT);
@@ -12,7 +12,32 @@ ThermoRegulator::ThermoRegulator() {
 }
 
 void ThermoRegulator::regulate() {
+  int output;
+  
   if (isTurnedOn) {
-    analogWrite(THERMOREGULATOR_PIN, pid.getResultNow());
+    pid.input = ntc.getTempAverage();
+    output = pid.getResultNow();
+  } else {
+    output = 0;
   }
+
+  analogWrite(THERMOREGULATOR_PIN, output);
+}
+
+void ThermoRegulator::turnOn() {
+  pid.getResultNow();
+  isTurnedOn = true;
+}
+
+void ThermoRegulator::turnOff() {
+  isTurnedOn = false;
+    analogWrite(THERMOREGULATOR_PIN, 0);
+}
+
+void ThermoRegulator::changeNeededTemperature(float tempC) {
+  pid.setpoint = tempC;
+}
+
+ThermoRegulator::~ThermoRegulator() {
+  turnOff();
 }
