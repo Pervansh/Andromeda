@@ -50,7 +50,7 @@ bool Logger::startLogging(const char* fileName) {
 
 bool Logger::startLogging(const String& fileName) {
   char* fileNameArray = new char[fileName.length()];
-  fileName.toCharArray(fileNameArray, fileName.length());
+  fileName.toCharArray(fileNameArray, fileName.length() + 1);
   startLogging(fileNameArray);
   delete[] fileNameArray;
 }
