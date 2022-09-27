@@ -31,4 +31,9 @@ void loop() {
   indicate();
   thermoRegulator.regulate();
   logger.logOnTimer();
+
+  if (millis() >= 1000) {
+    logger.finishLogging();
+    Serial.println("Logging is over");
+  }
 }
