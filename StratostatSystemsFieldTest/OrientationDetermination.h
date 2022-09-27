@@ -1,7 +1,7 @@
 #pragma once
 
 #include <MPU6050.h>
-#include <BMP280_DEV.h>
+#include <DFRobot_BMP280.h>
 #include <Device.h>
 #include <TinyGPS++.h>
 #include <TinyGPSPlus.h>
@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-extern BMP280_DEV     bmp;
-extern MPU6050        mpu;
-extern TinyGPSPlus    gps;
-extern SoftwareSerial gpsSerial;
+extern DFRobot_BMP280_IIC bmp;
+extern MPU6050            mpu;
+extern TinyGPSPlus        gps;
+extern SoftwareSerial     gpsSerial;
 
 void setupOrientationDetermination();
 

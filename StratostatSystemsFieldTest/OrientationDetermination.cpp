@@ -1,18 +1,20 @@
 #include "OrientationDetermination.h"
 
+#include <Wire.h>
 #include "config.h"
 
-extern BMP280_DEV     bmp = BMP280_DEV();
-extern MPU6050        mpu = MPU6050();
-extern TinyGPSPlus    gps = TinyGPSPlus();
-extern SoftwareSerial gpsSerial(GPS_RX_PIN, GPS_TX_PIN);
+extern DFRobot_BMP280_IIC bmp = DFRobot_BMP280_IIC(&Wire, DFRobot_BMP280_IIC::eSdoLow);
+extern MPU6050            mpu = MPU6050();
+extern TinyGPSPlus        gps = TinyGPSPlus();
+extern SoftwareSerial     gpsSerial(GPS_RX_PIN, GPS_TX_PIN);
 
 void setupOrientationDetermination() {
   Wire.begin();
 
-  bmp.begin();                                    // Default initialisation, place the BMP280 into SLEEP_MODE 
-  bmp.setTimeStandby(TIME_STANDBY_2000MS);       // Set the standby time to 2 seconds
-  bmp.startNormalConversion();                  // Start BMP280 continuous conversion in NORMAL_MODE
+  bmp.reset();
+  if (bmp.begin() != DFRobot_BMP280_IIC::eStatusOK) {
+    Serial.println("bmp begin faild");
+  }
 
   if (!USE_MPU6050_DEFAULT_I2C_ADDRESS) {
     mpu = MPU6050(MPU6050_INSTEAD_OF_DEFAULT_I2C_ADDRESS);
@@ -26,15 +28,11 @@ void setupOrientationDetermination() {
 }
 
 float getBmpAltitude() {
-  float data;
-  bmp.getAltitude(data);
-  return data;
+  return bmp.calAltitude(SEA_LEVEL_PRESSURE, bmp.getPressure());
 }
 
 float getBmpPressure() {
-  float data;
-  bmp.getPressure(data);
-  return data;
+  return bmp.getPressure();
 }
 
 float getMpuAccelerationX() {
