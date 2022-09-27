@@ -8,6 +8,11 @@
   Вспомогательный файл для конфига
 */
 
+// Для компилирования в Arduino IDE 2.0
+#ifndef BUILTIN_SDCARD
+  #define BUILTIN_SDCARD 10
+#endif
+
 #define PARAMETER(name, value)         const auto name = value;
 #define ARRAY(name, type, count, data) const type name[ count ] = { data };
 #define DATA(...)                      __VA_ARGS__
