@@ -16,7 +16,7 @@ private:
     const String& getObservationName();
   };
 
-  // For FuncType use only FUNCTORS with convertable to String return values!
+  // For FuncType use only no argument FUNCTORS with convertable to String return values!
   template<typename FuncType>
   class Observer : public ObserverBase {
   private:
@@ -28,6 +28,7 @@ private:
   };
 
   File file;
+
   unsigned long logTimer;
   unsigned long loggingStartTimer;
   unsigned long loggingDelay;
@@ -36,18 +37,18 @@ private:
   ObserverBase* observers[LOG_MAX_DATA_COLUMNS];
 
 public:
-  const char* FILE_NAME;
 
-  Logger(const char* fileName = "data.txt", unsigned long _loggingDelay = 50);
+  Logger(unsigned long _loggingDelay = 50);
 
-  bool startLogging();
+  bool startLogging(const char* fileName = "data.txt");
+  bool startLogging(const String& fileName);
   void finishLogging();
 
   void log();
   void logOnTimer();
 
   /*!
-    @brief For FuncType use only FUNCTORS with convertable to String return values!
+    @brief For FuncType use only no argument FUNCTORS with convertable to String return values!
            Creates data column in log file. Every call of log() asks columnDataFunc for data
            and writes it in column.
            Doesn't create column if current data column count equals LOG_MAX_DATA_COLUMNS.

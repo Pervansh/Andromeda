@@ -11,16 +11,17 @@ const String& Logger::ObserverBase::getObservationName() {
   return observationName;
 }
 
-Logger::Logger(const char* fileName, unsigned long _loggingDelay)
-  : FILE_NAME(fileName), loggingDelay(_loggingDelay), observersCount(0) {}
+Logger::Logger(unsigned long _loggingDelay)
+  : loggingDelay(_loggingDelay), observersCount(0) {}
 
-bool Logger::startLogging() {
+bool Logger::startLogging(const char* fileName) {
   if (file) {
     return true;
   }
 
   if (SD.begin(SD_CARD_CHIP_SELECT)) {
-    file = SD.open(FILE_NAME, FILE_WRITE);
+    // Хз, работает чи нет
+    file = SD.open(fileName, FILE_WRITE);
 
     if (file) {
       // Printing of column names
@@ -45,6 +46,13 @@ bool Logger::startLogging() {
   
   Serial.println("ERROR: SD-CARD CAN'T BE OPENED!");
   return false;
+}
+
+bool Logger::startLogging(const String& fileName) {
+  char* fileNameArray = new char[fileName.length()];
+  fileName.toCharArray(fileNameArray, fileName.length() + 1);
+  startLogging(fileNameArray);
+  delete[] fileNameArray;
 }
 
 void Logger::finishLogging() {

@@ -3,36 +3,51 @@
 #include "Indications.h"
 #include "ThermoRegulation.h"
 #include "Logger.h"
+#include "OrientationDetermination.h"
 
 ThermoRegulator thermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C);
 Logger logger;
 
+String sessionCode = LOGGING_FILE_NAME;
+int loggingCycleCount = 0;
+
 void setup() {
   Serial.begin(3600);
   delay(50);
-  Serial.print(PID_COEFFICIENTS[0]);
-  Serial.print(' ');
-  Serial.print(PID_COEFFICIENTS[1]);
-  Serial.print(' ');
-  Serial.print(PID_COEFFICIENTS[2]);
-  Serial.println();
 
   setupIndications();
+  setupOrientationDetermination();
 
   logger.setLoggingDelay(LOGGING_MILLIS_DELAY);
+
   logger.addColumn(String("Thermoregulation ntc (*C)"), [=]() -> float { 
     return thermoRegulator.getNtc().getTempAverage();
   });
 
-  logger.startLogging();
+  logger.addColumn(String("BmpAltitude (m)"), &getBmpAltitude);
+  logger.addColumn(String("BmpPressure"), &getBmpPressure);
+
+  logger.addColumn(String("AccX"), &getMpuAccelerationX);
+  logger.addColumn(String("AccY"), &getMpuAccelerationY);
+  logger.addColumn(String("AccZ"), &getMpuAccelerationZ);
+  logger.addColumn(String("RotX"), &getMpuRotationX);
+  logger.addColumn(String("RotY"), &getMpuRotationY);
+  logger.addColumn(String("RotZ"), &getMpuRotationZ);
+  
+  logger.addColumn(String("Latitude"), &getGpsLatitude);
+  logger.addColumn(String("Longitude"), &getGpsLongitude);
+
+  logger.startLogging(sessionCode + ".txt");
 }
 
 void loop() {
+  updateGpsData();
+
   indicate();
   thermoRegulator.regulate();
   logger.logOnTimer();
 
-  if (millis() >= 1000) {
+  if (millis() >= 10000) {
     logger.finishLogging();
   } else {
     Serial.println("Logging");
