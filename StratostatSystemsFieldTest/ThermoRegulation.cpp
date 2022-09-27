@@ -38,6 +38,10 @@ void ThermoRegulator::changeNeededTemperature(float tempC) {
   pid.setpoint = tempC;
 }
 
+const GyverNTC& ThermoRegulator::getNtc() {
+  return ntc;
+}
+
 ThermoRegulator::~ThermoRegulator() {
   turnOff();
 }

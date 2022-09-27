@@ -24,6 +24,8 @@ public:
 
   void changeNeededTemperature(float tempC);
 
+  const GyverNTC& getNtc();
+
   ~ThermoRegulator();
 };
 
