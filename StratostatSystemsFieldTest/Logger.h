@@ -28,6 +28,7 @@ private:
   };
 
   File file;
+
   unsigned long logTimer;
   unsigned long loggingStartTimer;
   unsigned long loggingDelay;
@@ -36,11 +37,10 @@ private:
   ObserverBase* observers[LOG_MAX_DATA_COLUMNS];
 
 public:
-  const char* FILE_NAME;
 
-  Logger(const char* fileName = "data.txt", unsigned long _loggingDelay = 50);
+  Logger(unsigned long _loggingDelay = 50);
 
-  bool startLogging();
+  bool startLogging(const String& fileName = "data.txt");
   void finishLogging();
 
   void log();
