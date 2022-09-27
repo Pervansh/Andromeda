@@ -34,6 +34,7 @@ void loop() {
 
   if (millis() >= 1000) {
     logger.finishLogging();
-    Serial.println("Logging is over");
+  } else {
+    Serial.println("Logging");
   }
 }
