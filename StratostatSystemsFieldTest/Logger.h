@@ -40,7 +40,8 @@ public:
 
   Logger(unsigned long _loggingDelay = 50);
 
-  bool startLogging(const String& fileName = "data.txt");
+  bool startLogging(const char* fileName = "data.txt");
+  bool startLogging(const String& fileName);
   void finishLogging();
 
   void log();
