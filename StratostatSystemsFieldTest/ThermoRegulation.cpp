@@ -3,6 +3,12 @@
 
 #include "config.h"
 
+GyverNTC carbonNtc(LOG_THERMISTOR_PIN, 10000, 3435);
+
+float getCarbonTemperature() {
+  return carbonNtc.getTempAverage();
+}
+
 ThermoRegulator::ThermoRegulator(float neededTempC) {
   pid.setLimits(0, 255);
 

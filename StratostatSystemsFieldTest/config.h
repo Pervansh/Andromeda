@@ -29,6 +29,12 @@ PARAMETER(GPS_SERIAL_BAUD, 4800)
 // Задание массивов ARRAY(*имя массива*, *тип элементов массива*, *кол-во элементов*, DATA(*элементы через запятую*))
 ARRAY(PID_COEFFICIENTS, float, 3, DATA(1, 2, 3))
 
+ARRAY(SERVOS_PINS, int, 2, DATA(3, 4))
+ARRAY(FUSES_PINS,  int, 3, DATA(0, 0, 0))
+
+ARRAY(SERVOS_DEFAULT_POSITIONS,   int, ARRAY_SIZE(SERVOS_PINS), DATA(0, 0))
+ARRAY(SERVOS_ACTIVATED_POSITIONS, int, ARRAY_SIZE(SERVOS_PINS), DATA(90, 90))
+
 // Настройка пинов устройств SET_PIN(*смысловое имя пина/устройства*, *номер пина*)
 SET_PIN(BUZZER, 2)
 SET_PIN(LED_DATA, 35)

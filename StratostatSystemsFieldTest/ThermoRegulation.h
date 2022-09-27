@@ -8,6 +8,8 @@
 
 #include "config.h"
 
+float getCarbonTemperature();
+
 class ThermoRegulator {
 private:
   GyverPID pid = GyverPID(PID_COEFFICIENTS[0], PID_COEFFICIENTS[1], PID_COEFFICIENTS[2]);

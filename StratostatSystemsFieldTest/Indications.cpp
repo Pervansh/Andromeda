@@ -1,13 +1,24 @@
 #include "Indications.h"
 #include "Arduino.h"
 
-extern LedData indicationLeds[LED_COUNT] = {};
-extern Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(LED_COUNT, LED_DATA_PIN);
+// Leds
+struct LedData {
+  bool state = false;
+  bool colors[3];
+  int delta = 0;
+  int count = 0;
+  unsigned long timer = 0;
+
+  LedDate(){};
+};
+
+LedData indicationLeds[LED_COUNT] = {};
+Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(LED_COUNT, LED_DATA_PIN);
 
 // Buzzer
-extern bool buzzerState = false;
-extern int buzzerTone = 0, buzzerDelta = 0, buzzerCount = 0;
-extern unsigned long buzzerTimer = 0;
+bool buzzerState = false;
+int buzzerTone = 0, buzzerDelta = 0, buzzerCount = 0;
+unsigned long buzzerTimer = 0;
 
 void setupIndications() {
   pinMode(BUZZER_PIN, OUTPUT);
