@@ -16,7 +16,7 @@ private:
     const String& getObservationName();
   };
 
-  // For FuncType use only FUNCTORS with convertable to String return values!
+  // For FuncType use only no argument FUNCTORS with convertable to String return values!
   template<typename FuncType>
   class Observer : public ObserverBase {
   private:
@@ -48,7 +48,7 @@ public:
   void logOnTimer();
 
   /*!
-    @brief For FuncType use only FUNCTORS with convertable to String return values!
+    @brief For FuncType use only no argument FUNCTORS with convertable to String return values!
            Creates data column in log file. Every call of log() asks columnDataFunc for data
            and writes it in column.
            Doesn't create column if current data column count equals LOG_MAX_DATA_COLUMNS.

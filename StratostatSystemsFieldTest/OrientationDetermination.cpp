@@ -9,9 +9,6 @@ extern SoftwareSerial gpsSerial(GPS_RX_PIN, GPS_TX_PIN);
 
 void setupOrientationDetermination() {
   Wire.begin();
-  gpsSerial.begin(GPS_SERIAL_BAUD);
-
-  // Проверки GPS нет!!!
 
   bmp.begin();                                    // Default initialisation, place the BMP280 into SLEEP_MODE 
   bmp.setTimeStandby(TIME_STANDBY_2000MS);       // Set the standby time to 2 seconds
@@ -23,6 +20,9 @@ void setupOrientationDetermination() {
   
   mpu.initialize();
   Serial.println(mpu.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+
+  gpsSerial.begin(GPS_SERIAL_BAUD);
+  // Проверки GPS нет!!!
 }
 
 float getBmpAltitude() {
@@ -59,4 +59,18 @@ float getMpuRotationY() {
 
 float getMpuRotationZ() {
   return mpu.getRotationZ();
+}
+
+void updateGpsData() {
+  while (gpsSerial.available() > 0) {
+    gps.encode(gpsSerial.read());
+  }
+}
+
+float getGpsLatitude() {
+  gps.location.lat();
+}
+
+float getGpsLongitude() {
+  gps.location.lng();
 }

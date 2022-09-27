@@ -24,20 +24,25 @@ void setup() {
     return thermoRegulator.getNtc().getTempAverage();
   });
 
+  logger.addColumn(String("BmpAltitude (m)"), &getBmpAltitude);
+  logger.addColumn(String("BmpPressure"), &getBmpPressure);
+
   logger.addColumn(String("AccX"), &getMpuAccelerationX);
   logger.addColumn(String("AccY"), &getMpuAccelerationY);
   logger.addColumn(String("AccZ"), &getMpuAccelerationZ);
   logger.addColumn(String("RotX"), &getMpuRotationX);
   logger.addColumn(String("RotY"), &getMpuRotationY);
   logger.addColumn(String("RotZ"), &getMpuRotationZ);
-
-  logger.addColumn(String("BmpAltitude (m)"), &getBmpAltitude);
-  logger.addColumn(String("BmpPressure"), &getBmpPressure);
+  
+  logger.addColumn(String("Latitude"), &getGpsLatitude);
+  logger.addColumn(String("Longitude"), &getGpsLongitude);
 
   logger.startLogging(sessionCode + ".txt");
 }
 
 void loop() {
+  updateGpsData();
+
   indicate();
   thermoRegulator.regulate();
   logger.logOnTimer();

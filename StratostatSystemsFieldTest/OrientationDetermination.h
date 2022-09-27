@@ -26,4 +26,7 @@ float getMpuRotationX();
 float getMpuRotationY();
 float getMpuRotationZ();
 
+void updateGpsData();
 
+float getGpsLatitude();
+float getGpsLongitude();
