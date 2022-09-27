@@ -7,32 +7,39 @@
 Servo servos[ARRAY_SIZE(SERVOS_PINS)];
 
 void setupExecutables() {
-    for (int i = 0; i < ARRAY_SIZE(SERVOS_PINS); ++i) {
+    COUNT_FOR(i, SERVOS_PINS) {
         servos[i].attach(SERVOS_PINS[i]);
     }
-
     resetServos();
+
+    COUNT_FOR(i, FUSES_PINS) {
+        pinMode(FUSES_PINS[i], OUTPUT);
+    }
     resetFuses();
 }
 
 void resetServos() {
-    for (int i = 0; i < ARRAY_SIZE(SERVOS_DEFAULT_POSITIONS); ++i) {
+    COUNT_FOR(i, SERVOS_DEFAULT_POSITIONS) {
         servos[i].write(SERVOS_DEFAULT_POSITIONS[i]);
     }
 }
 
 void resetFuses() {
-
+    COUNT_FOR(i, FUSES_ACTIVATION_STATES) {
+        digitalWrite(FUSES_PINS[i], !FUSES_ACTIVATION_STATES[i]);
+    }
 }
 
 void activateServos() {
-    for (int i = 0; i < ARRAY_SIZE(SERVOS_ACTIVATED_POSITIONS); ++i) {
+    COUNT_FOR(i, SERVOS_ACTIVATED_POSITIONS) {
         servos[i].write(SERVOS_ACTIVATED_POSITIONS[i]);
     }
 }
 
 void activateFuses() {
-
+    COUNT_FOR(i, FUSES_ACTIVATION_STATES) {
+        digitalWrite(FUSES_PINS[i], FUSES_ACTIVATION_STATES[i]);
+    }
 }
 
 bool getServosState() {

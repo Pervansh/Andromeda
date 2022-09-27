@@ -4,6 +4,7 @@
 #include "ThermoRegulation.h"
 #include "Logger.h"
 #include "OrientationDetermination.h"
+#include "Executables.h"
 
 ThermoRegulator thermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C);
 Logger logger;
@@ -37,7 +38,14 @@ void setup() {
 
     logger.startLogging(sessionCode + ".txt");
 
-    
+    setupExecutables();
+
+    delay(1500);
+    activateServos();
+    activateFuses();
+    delay(2500);
+    resetServos();
+    resetFuses();
 }
 
 void loop() {
