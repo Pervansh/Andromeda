@@ -44,7 +44,9 @@ void setup() {
 
     logger.startLogging(sessionCode + ".txt");
 
-    startStateSequence();
+    thermoRegulator.turnOn();
+
+    // startStateSequence();
 }
 
 void loop() {
@@ -53,7 +55,7 @@ void loop() {
 
     thermoRegulator.regulate();
     Serial.print("Thermoregulation ntc (*C): ");
-    Serial.print(thermoRegulator.getNtc().getTempAverage());
+    Serial.println(thermoRegulator.getNtc().getTempAverage());
 
     logger.logOnTimer();
 }
