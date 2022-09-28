@@ -27,12 +27,12 @@ bool toNextState(void*) {
 }
 
 void statesTick() {
+    stateSequence.getTimer().tick();
+
     if (isToNextState) {
         stateSequence.toNext();
         isToNextState = false;
     }
-
-    stateSequence.getTimer().tick();
 }
 
 namespace States {
@@ -76,6 +76,8 @@ bool waitingApogee(void* codedDelay) {
         toNextState();
     }
 
+    Serial.println("Waiting apogee");
+
     return true;
 }
 
@@ -83,9 +85,14 @@ void activateExecutables() {
     changeBuzzerIndication(0);
     activateServos();
 
+    Serial.println("activate executables");
+
     stateSequence.getTimer().in(2000, [](void*) -> bool {
         resetServos();
         toNextState();
+
+        Serial.println("deactivate executables");
+
         return true;
     });
 }
