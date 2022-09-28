@@ -5,9 +5,10 @@
 #include "Logger.h"
 #include "OrientationDetermination.h"
 #include "Executables.h"
+#include "States.h"
 
 ThermoRegulator thermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C);
-Logger logger;
+Logger logger = getStateLogger();
 
 String sessionCode = LOGGING_FILE_NAME;
 int loggingCycleCount = 0;
@@ -16,8 +17,12 @@ void setup() {
     Serial.begin(3600);
     delay(50);
 
-    setupIndications();
-    setupOrientationDetermination();
+    getStateSequence().addNext(States::setupUp)
+                      .addNext(States::prelaunchWork)
+                      .addNext(States::launched)
+                      .addNext(States::activateExecutables)
+                      .addNext(States::waitingLanding)
+                      .addNext(States::onLanding);
 
     logger.setLoggingDelay(LOGGING_MILLIS_DELAY);
 
@@ -38,35 +43,11 @@ void setup() {
 
     logger.startLogging(sessionCode + ".txt");
 
-    setupExecutables();
-
-    delay(1500);
-    activateServos();
-    delay(1000);
-    resetServos();
-
-    delay(3000);
-    activateOneFuse(0);
-    delay(3000);
-    resetFuses();
-
-    delay(3000);
-    activateOneFuse(1);
-    delay(3000);
-    resetFuses();
-
-    delay(10000);
-    activateOneFuse(HEATING_FUSE_ID);
-    delay(20000);
-    resetFuses();
-
-    delay(0);
-    activateOneFuse(2);
-    delay(3000);
-    resetFuses();
+    getStateSequence().start();
 }
 
 void loop() {
+    getStateSequence().getTimer().tick();
     updateGpsData();
 
     indicate();
