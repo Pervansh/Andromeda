@@ -6,6 +6,7 @@
 #include "OrientationDetermination.h"
 #include "Executables.h"
 #include "States.h"
+#include "StateSequence.h"
 
 ThermoRegulator thermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C);
 Logger logger = getStateLogger();

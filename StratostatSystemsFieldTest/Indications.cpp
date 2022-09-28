@@ -9,7 +9,7 @@ struct LedData {
   int count = 0;
   unsigned long timer = 0;
 
-  LedDate(){};
+  LedDate() {}
 };
 
 LedData indicationLeds[LED_COUNT] = {};

@@ -6,14 +6,14 @@
 StateSequence& getStateSequence();
 Logger&        getStateLogger();
 
-void toNextState();
+bool toNextState(void* = nullptr);
 
 namespace States {
 
 void setupUp();
 void prelaunchWork();
 void launched();
-void waitingApogee(void* codedDelay);
+bool waitingApogee(void* codedDelay);
 void activateExecutables();
 void waitingLanding();
 void onLanding();

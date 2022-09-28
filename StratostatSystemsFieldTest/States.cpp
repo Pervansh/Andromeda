@@ -5,6 +5,7 @@
 #include "Indications.h"
 #include "Executables.h"
 #include "OrientationDetermination.h"
+#include "StateSequence.h"
 #include "config.h"
 
 StateSequence stateSequence;
@@ -18,8 +19,9 @@ Logger&  getStateLogger() {
     return stateLogger;
 }
 
-void toNextState() {
+bool toNextState(void*) {
     stateSequence.toNext();
+    return true;
 }
 
 namespace States {
@@ -47,7 +49,7 @@ void launched() {
     stateSequence.getTimer().every(1, waitingApogee, (void*)((unsigned long)1));
 }
 
-void waitingApogee(void* codedDelay) {
+bool waitingApogee(void* codedDelay) {
     unsigned long delay = (unsigned long)codedDelay;
     auto ax = getMpuAccelerationX();
     auto ay = getMpuAccelerationY();
@@ -62,14 +64,17 @@ void waitingApogee(void* codedDelay) {
     if (waitingApogeeFallingTime >= WAITING_APOGEE_TRIGGER_FALLING_TIME) {
         stateSequence.toNext();
     }
+
+    return true;
 }
 
 void activateExecutables() {
     activateServos();
 
-    stateSequence.getTimer().in(2000, [](){
+    stateSequence.getTimer().in(2000, [](void*) -> bool {
         resetServos();
         toNextState();
+        return true;
     });
 }
 
