@@ -25,5 +25,5 @@ public:
     void start();
     void stop();
     
-    StateTimer& getTimer();
+    StateTimer& getTimer() { return timer; }
 };

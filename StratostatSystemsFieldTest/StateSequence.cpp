@@ -49,6 +49,3 @@ void StateSequence::stop() {
     wasStarted = false;
 }
 
-StateSequence::StateTimer& StateSequence::getTimer() {
-    return timer;
-}
