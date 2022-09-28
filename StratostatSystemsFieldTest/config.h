@@ -26,16 +26,18 @@ PARAMETER(MPU6050_INSTEAD_OF_DEFAULT_I2C_ADDRESS, 0x00)
 
 PARAMETER(GPS_SERIAL_BAUD, 4800)
 
+PARAMETER(HEATING_FUSE_ID, 3)
+
 // Задание массивов ARRAY(*имя массива*, *тип элементов массива*, *кол-во элементов*, DATA(*элементы через запятую*))
 ARRAY(PID_COEFFICIENTS, float, 3, DATA(1, 2, 3))
 
 ARRAY(SERVOS_PINS, int, 2, DATA(3, 4))
-ARRAY(FUSES_PINS,  int, 3, DATA(36, 38, 37))
+ARRAY(FUSES_PINS,  int, 4, DATA(36, 38, 37, 21))
 
 ARRAY(SERVOS_DEFAULT_POSITIONS,   int, ARRAY_SIZE(SERVOS_PINS), DATA(0, 90))
 ARRAY(SERVOS_ACTIVATED_POSITIONS, int, ARRAY_SIZE(SERVOS_PINS), DATA(90, 0))
 
-ARRAY(FUSES_ACTIVATION_STATES, bool, ARRAY_SIZE(FUSES_PINS), DATA(true, true, true))
+ARRAY(FUSES_ACTIVATION_STATES, bool, ARRAY_SIZE(FUSES_PINS), DATA(true, true, true, true))
 
 // Настройка пинов устройств SET_PIN(*смысловое имя пина/устройства*, *номер пина*)
 SET_PIN(BUZZER, 2)

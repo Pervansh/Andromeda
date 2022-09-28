@@ -55,7 +55,12 @@ void setup() {
     delay(3000);
     resetFuses();
 
-    delay(3000);
+    delay(10000);
+    activateOneFuse(HEATING_FUSE_ID);
+    delay(20000);
+    resetFuses();
+
+    delay(0);
     activateOneFuse(2);
     delay(3000);
     resetFuses();

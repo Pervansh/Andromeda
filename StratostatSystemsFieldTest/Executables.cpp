@@ -46,7 +46,7 @@ void activateOneFuse(uint8_t id) {
     if (id < ARRAY_SIZE(FUSES_PINS)) {
         digitalWrite(FUSES_PINS[id], FUSES_ACTIVATION_STATES[id]);
     } else {
-        Serial.println("Can't ignate fuse! Fuse's Id (" + String(id) + ") greater than count of fuses (" + String(ARRAY_SIZE(FUSES_PINS)) + ").");
+        Serial.println("Can't ignate fuse! Fuse's Id (" + String(id) + ") is not less than count of fuses (" + String(ARRAY_SIZE(FUSES_PINS)) + ").");
     }
 }
 
