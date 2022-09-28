@@ -14,6 +14,8 @@ private:
         ObserverBase(const String& _observationName);
         virtual String observe() = 0;
         const String& getObservationName();
+
+        virtual ~ObserverBase();
     };
 
   // For FuncType use only no argument FUNCTORS with convertable to String return values!
@@ -25,6 +27,8 @@ private:
     public:
         Observer(const String& _observationName, FuncType _interviewee);
         String observe() override;
+
+        ~Observer() override;
     };
 
     File file;
@@ -87,3 +91,6 @@ template<typename FuncType>
 String Logger::Observer<FuncType>::observe() {
     return String(interviewee());
 }
+
+template<typename FuncType>
+Logger::Observer<FuncType>::~Observer() {}

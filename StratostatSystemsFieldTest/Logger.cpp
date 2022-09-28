@@ -11,6 +11,8 @@ const String& Logger::ObserverBase::getObservationName() {
   return observationName;
 }
 
+Logger::ObserverBase::~ObserverBase() {}
+
 Logger::Logger(unsigned long _loggingDelay)
   : loggingDelay(_loggingDelay), observersCount(0) {}
 
@@ -51,8 +53,12 @@ bool Logger::startLogging(const char* fileName) {
 bool Logger::startLogging(const String& fileName) {
   char* fileNameArray = new char[fileName.length()];
   fileName.toCharArray(fileNameArray, fileName.length() + 1);
-  startLogging(fileNameArray);
+
+  bool result = startLogging(fileNameArray);
+  
   delete[] fileNameArray;
+
+  return result;
 }
 
 void Logger::finishLogging() {

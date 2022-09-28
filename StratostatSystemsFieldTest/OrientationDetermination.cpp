@@ -66,9 +66,9 @@ void updateGpsData() {
 }
 
 float getGpsLatitude() {
-  gps.location.lat();
+  return gps.location.lat();
 }
 
 float getGpsLongitude() {
-  gps.location.lng();
+  return gps.location.lng();
 }

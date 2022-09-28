@@ -42,9 +42,22 @@ void setup() {
 
     delay(1500);
     activateServos();
-    activateFuses();
-    delay(2500);
+    delay(1000);
     resetServos();
+
+    delay(3000);
+    activateOneFuse(0);
+    delay(3000);
+    resetFuses();
+
+    delay(3000);
+    activateOneFuse(1);
+    delay(3000);
+    resetFuses();
+
+    delay(3000);
+    activateOneFuse(2);
+    delay(3000);
     resetFuses();
 }
 
