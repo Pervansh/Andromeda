@@ -44,20 +44,16 @@ void setup() {
 
     logger.startLogging(sessionCode + ".txt");
 
-    getStateSequence().start();
+    startStateSequence();
 }
 
 void loop() {
-    updateGpsData();
     statesTick();
-
     indicate();
-    thermoRegulator.regulate();
-    logger.logOnTimer();
 
-    if (millis() >= 10000) {
-        logger.finishLogging();
-    } else {
-        Serial.println("Logging");
-    }
+    thermoRegulator.regulate();
+    Serial.print("Thermoregulation ntc (*C): ");
+    Serial.print(thermoRegulator.getNtc().getTempAverage());
+
+    logger.logOnTimer();
 }

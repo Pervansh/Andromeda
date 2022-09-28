@@ -26,6 +26,10 @@ bool toNextState(void*) {
     return true;
 }
 
+void startStateSequence() {
+    stateSequence.start();
+}
+
 void statesTick() {
     stateSequence.getTimer().tick();
 
