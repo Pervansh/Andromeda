@@ -7,6 +7,7 @@ StateSequence& getStateSequence();
 Logger&        getStateLogger();
 
 bool toNextState(void* = nullptr);
+void statesTick();
 
 namespace States {
 

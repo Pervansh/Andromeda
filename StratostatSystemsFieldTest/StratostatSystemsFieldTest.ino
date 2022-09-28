@@ -48,8 +48,8 @@ void setup() {
 }
 
 void loop() {
-    getStateSequence().getTimer().tick();
     updateGpsData();
+    statesTick();
 
     indicate();
     thermoRegulator.regulate();

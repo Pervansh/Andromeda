@@ -11,6 +11,8 @@
 StateSequence stateSequence;
 Logger stateLogger;
 
+bool isToNextState = false;
+
 StateSequence& getStateSequence() {
     return stateSequence;
 }
@@ -20,8 +22,17 @@ Logger&  getStateLogger() {
 }
 
 bool toNextState(void*) {
-    stateSequence.toNext();
+    isToNextState = true;
     return true;
+}
+
+void statesTick() {
+    if (isToNextState) {
+        stateSequence.toNext();
+        isToNextState = false;
+    }
+
+    stateSequence.getTimer().tick();
 }
 
 namespace States {
@@ -33,7 +44,7 @@ void setupUp() {
     setupOrientationDetermination();
     setupExecutables();
 
-    stateSequence.toNext();
+    toNextState();
 }
 
 void prelaunchWork() {
@@ -55,20 +66,21 @@ bool waitingApogee(void* codedDelay) {
     auto ay = getMpuAccelerationY();
     auto az = getMpuAccelerationZ();
 
-    if (ax * ax + ay * ay + az * az <= FALLING_ACCELERATION_UPPER_BOUND) {
+    if (ax * ax + ay * ay + az * az <= FALLING_ACCELERATION_UPPER_BOUND_SQ) {
         waitingApogeeFallingTime += delay;
     } else {
         waitingApogeeFallingTime = 0;
     }
 
     if (waitingApogeeFallingTime >= WAITING_APOGEE_TRIGGER_FALLING_TIME) {
-        stateSequence.toNext();
+        toNextState();
     }
 
     return true;
 }
 
 void activateExecutables() {
+    changeBuzzerIndication(0);
     activateServos();
 
     stateSequence.getTimer().in(2000, [](void*) -> bool {
@@ -79,7 +91,7 @@ void activateExecutables() {
 }
 
 void waitingLanding() {
-    stateSequence.toNext();
+    toNextState();
 }
 
 void onLanding() {
