@@ -6,74 +6,78 @@
 
 class Logger {
 private:
-  class ObserverBase {
-  private:
-    String observationName;
+    class ObserverBase {
+    private:
+        String observationName;
 
-  public:
-    ObserverBase(const String& _observationName);
-    virtual String observe() = 0;
-    const String& getObservationName();
-  };
+    public:
+        ObserverBase(const String& _observationName);
+        virtual String observe() = 0;
+        const String& getObservationName();
+
+        virtual ~ObserverBase();
+    };
 
   // For FuncType use only no argument FUNCTORS with convertable to String return values!
-  template<typename FuncType>
-  class Observer : public ObserverBase {
-  private:
-    FuncType interviewee;
-  
-  public:
-    Observer(const String& _observationName, FuncType _interviewee);
-    String observe() override;
-  };
+    template<typename FuncType>
+    class Observer : public ObserverBase {
+    private:
+        FuncType interviewee;
 
-  File file;
+    public:
+        Observer(const String& _observationName, FuncType _interviewee);
+        String observe() override;
 
-  unsigned long logTimer;
-  unsigned long loggingStartTimer;
-  unsigned long loggingDelay;
+        ~Observer() override;
+    };
 
-  int observersCount;
-  ObserverBase* observers[LOG_MAX_DATA_COLUMNS];
+    File file;
+
+    unsigned long logTimer;
+    unsigned long loggingStartTimer;
+    unsigned long loggingDelay;
+
+    int observersCount;
+    ObserverBase* observers[LOG_MAX_DATA_COLUMNS];
 
 public:
 
-  Logger(unsigned long _loggingDelay = 50);
+    Logger(unsigned long _loggingDelay = 50);
 
-  bool startLogging(const char* fileName = "data.txt");
-  bool startLogging(const String& fileName);
-  void finishLogging();
+    bool startLogging(const char* fileName = "data.txt");
+    bool startLogging(const String& fileName);
+    void finishLogging();
 
-  void log();
-  void logOnTimer();
+    void log();
+    void logOnTimer();
 
-  /*!
-    @brief For FuncType use only no argument FUNCTORS with convertable to String return values!
-           Creates data column in log file. Every call of log() asks columnDataFunc for data
-           and writes it in column.
-           Doesn't create column if current data column count equals LOG_MAX_DATA_COLUMNS.
-    @return true if column was created, false if otherwise.
-  */
-  template<typename FuncType>
-  bool addColumn(const String& columnName, FuncType columnDataFunc);
+    /*!
+        @brief For FuncType use only no argument FUNCTORS with convertable to String return values!
+               Creates data column in log file. Every call of log() asks columnDataFunc for data
+               and writes it in column.
+               Doesn't create column if current data column count equals LOG_MAX_DATA_COLUMNS.
+        @return true if column was created, false if otherwise.
+    */
+    template<typename FuncType>
+    bool addColumn(const String& columnName, FuncType columnDataFunc);
 
-  // Sets time delta for logOnTimer()
-  void setLoggingDelay(unsigned long newDelay);
+    // Sets time delta for logOnTimer()
+    void setLoggingDelay(unsigned long newDelay);
 
-  ~Logger();
+    ~Logger();
 };
 
 template<typename FuncType>
 bool Logger::addColumn(const String& columnName, FuncType columnDataFunc) {
-  // Можно добавить добавления заголовка столбца после startLogging()
+    // Можно добавить добавления заголовка столбца после startLogging()
 
-  if (observersCount < LOG_MAX_DATA_COLUMNS) {
-    observers[observersCount] = new Observer<FuncType>(columnName, columnDataFunc);
-    observersCount++;
-    return true;
-  }
+    if (observersCount < LOG_MAX_DATA_COLUMNS) {
+        observers[observersCount] = new Observer<FuncType>(columnName, columnDataFunc);
+        observersCount++;
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 
@@ -85,5 +89,8 @@ Logger::Observer<FuncType>::Observer(const String& _observationName, FuncType _i
 
 template<typename FuncType>
 String Logger::Observer<FuncType>::observe() {
-  return String(interviewee());
+    return String(interviewee());
 }
+
+template<typename FuncType>
+Logger::Observer<FuncType>::~Observer() {}

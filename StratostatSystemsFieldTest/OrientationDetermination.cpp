@@ -3,10 +3,10 @@
 #include <Wire.h>
 #include "config.h"
 
-extern DFRobot_BMP280_IIC bmp = DFRobot_BMP280_IIC(&Wire, DFRobot_BMP280_IIC::eSdoLow);
-extern MPU6050            mpu = MPU6050();
-extern TinyGPSPlus        gps = TinyGPSPlus();
-extern SoftwareSerial     gpsSerial(GPS_RX_PIN, GPS_TX_PIN);
+DFRobot_BMP280_IIC bmp = DFRobot_BMP280_IIC(&Wire, DFRobot_BMP280_IIC::eSdoLow);
+MPU6050            mpu = MPU6050();
+TinyGPSPlus        gps = TinyGPSPlus();
+SoftwareSerial     gpsSerial(GPS_RX_PIN, GPS_TX_PIN);
 
 void setupOrientationDetermination() {
   Wire.begin();
@@ -66,9 +66,9 @@ void updateGpsData() {
 }
 
 float getGpsLatitude() {
-  gps.location.lat();
+  return gps.location.lat();
 }
 
 float getGpsLongitude() {
-  gps.location.lng();
+  return gps.location.lng();
 }

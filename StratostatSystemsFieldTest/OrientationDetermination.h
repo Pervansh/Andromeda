@@ -9,11 +9,6 @@
 
 #include "config.h"
 
-extern DFRobot_BMP280_IIC bmp;
-extern MPU6050            mpu;
-extern TinyGPSPlus        gps;
-extern SoftwareSerial     gpsSerial;
-
 void setupOrientationDetermination();
 
 float getBmpAltitude();
