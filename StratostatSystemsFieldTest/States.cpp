@@ -53,7 +53,7 @@ void statesTick() {
 bool startStateLogger (void* number) {
     auto fileName = LOGGING_FILE_NAME;
     int postfixNumber = MILLIS_TO_MINUTES(startStateLoggerCallCount * LOG_NEW_FILE_CREATION_EVERY);
-    stateLogger.startLogging(String(fileName) + "-" + String((unsigned long)postfixNumber));
+    stateLogger.startLogging(String(fileName) + "-" + String((unsigned long)postfixNumber) + ".txt");
     startStateLoggerCallCount++;
     return true;
 }
