@@ -11,9 +11,6 @@
 ThermoRegulator thermoRegulator = getStateThermoRegulator();
 Logger logger = getStateLogger();
 
-String sessionCode = LOGGING_FILE_NAME;
-int loggingCycleCount = 0;
-
 void setup() {
     Serial.begin(3600);
     delay(50);
@@ -42,16 +39,10 @@ void setup() {
     logger.addColumn(String("RotY"), &getMpuRotationY);
     logger.addColumn(String("RotZ"), &getMpuRotationZ);
 
-    logger.startLogging(sessionCode + ".txt");
-
     startStateSequence();
 }
 
 void loop() {
     statesTick();
     indicate();
-
-    Serial.print("Thermoregulation ntc (*C): ");
-    Serial.println(thermoRegulator.getNtc().getTempAverage());
-
 }
