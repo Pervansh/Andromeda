@@ -8,7 +8,7 @@
 #include "States.h"
 #include "StateSequence.h"
 
-ThermoRegulator thermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C, true);
+ThermoRegulator thermoRegulator = getStateThermoRegulator();
 Logger logger = getStateLogger();
 
 String sessionCode = LOGGING_FILE_NAME;
@@ -44,8 +44,6 @@ void setup() {
 
     logger.startLogging(sessionCode + ".txt");
 
-    thermoRegulator.turnOn();
-
     // startStateSequence();
 }
 
@@ -53,7 +51,6 @@ void loop() {
     statesTick();
     indicate();
 
-    thermoRegulator.regulate();
     Serial.print("Thermoregulation ntc (*C): ");
     Serial.println(thermoRegulator.getNtc().getTempAverage());
 
