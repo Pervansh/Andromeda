@@ -90,15 +90,17 @@ void activateExecutables() {
     setupExecutables();
     changeBuzzerIndication(0);
 
-    Serial.println("Activate executables");
+    Serial.println("Activating executables");
     
     stateSequence.getTimer().in(SERVOS_ACTIVATION_DELAY,
     [](void*) -> bool {
         activateServos();
+        Serial.println("Activating servos");
         return true;
     });
     stateSequence.getTimer().in(SERVOS_ACTIVATION_DELAY + SERVOS_ACTIVATITY_TIME,
     [](void*) -> bool {
+        Serial.println("Deactivating servos");
         resetServos();
         return true;
     });
@@ -109,11 +111,13 @@ void activateExecutables() {
         stateSequence.getTimer().in(ORDINARY_FUSE_1_ACTIVATION_DELAY,
         [](void) -> bool {
             activateOneFuse(ORDINARY_FUSE_1_ID);
+            Serial.println("Activating ORDINARY_FUSE_1");
             return true;
         });
         stateSequence.getTimer().in(ORDINARY_FUSE_1_ACTIVATION_DELAY + EACH_NOT_HEATING_FUSE_ACTIVATITY_TIME,
         [](void) -> bool {
             resetFuses();
+            Serial.println("Deactivating ORDINARY_FUSE_1");
             return true;
         });
 
@@ -121,18 +125,21 @@ void activateExecutables() {
         stateSequence.getTimer().in(ORDINARY_FUSE_2_ACTIVATION_DELAY,
         [](void) -> bool {
             activateOneFuse(ORDINARY_FUSE_2_ID);
+            Serial.println("Activating ORDINARY_FUSE_2");
             return true;
         });
         stateSequence.getTimer().in(ORDINARY_FUSE_2_ACTIVATION_DELAY + EACH_NOT_HEATING_FUSE_ACTIVATITY_TIME,
         [](void) -> bool {
             resetFuses();
+            Serial.println("Deactivating ORDINARY_FUSE_2");
             return true;
         });
 
         // HEATING_FUSE ACT
         stateSequence.getTimer().in(HEATING_FUSE_ACTIVATION_DELAY,
         [](void) -> bool {
-            activateOneFuse(HEATING_FUSE_1_ID);
+            activateOneFuse(HEATING_FUSE_ID);
+            Serial.println("Activating HEATING_FUSE");
             return true;
         });
 
@@ -140,12 +147,15 @@ void activateExecutables() {
         stateSequence.getTimer().in(HEATING_FUSE_ACTIVATION_DELAY + HEATING_FUSE_ACTIVATITY_TIME,
         [](void) -> bool {
             resetFuses();
+            Serial.println("Deactivating HEATING_FUSE");
             activateOneFuse(WARMED_FUSE_ID);
+            Serial.println("Activating WARMED_FUSE");
             return true;
         });
         stateSequence.getTimer().in(HEATING_FUSE_ACTIVATION_DELAY + HEATING_FUSE_ACTIVATITY_TIME + EACH_NOT_HEATING_FUSE_ACTIVATITY_TIME,
         [](void) -> bool {
             resetFuses();
+            Serial.println("Deactivating WARMED_FUSE");
             return true;
         });
     }
@@ -153,6 +163,7 @@ void activateExecutables() {
     stateSequence.getTimer().in(MAX_ACTIVATION_TIME, [](void*) -> bool {
         resetServos();
         resetFuses();
+        Serial.println("Deactivating all executables");
         toNextState();
         return true;
     });
