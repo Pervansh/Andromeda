@@ -11,6 +11,7 @@ float getCarbonTemperature() {
 
 ThermoRegulator::ThermoRegulator(float neededTempC) {
   pid.setLimits(0, 255);
+  pid.setDirection(THERMOREGULATOR_PID_DIRECTION);
 
   pinMode(THERMOREGULATOR_PIN, OUTPUT);
   

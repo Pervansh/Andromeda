@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <SD.h>
+#include <GyverPID.h>
 
 /*
   !!!НИЧЕГО ЗДЕСЬ НЕ ТРОГАТЬ!!!

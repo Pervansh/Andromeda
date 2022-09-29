@@ -26,6 +26,10 @@ bool toNextState(void*) {
     return true;
 }
 
+void startStateSequence() {
+    stateSequence.start();
+}
+
 void statesTick() {
     stateSequence.getTimer().tick();
 
@@ -57,7 +61,8 @@ void launched() {
     waitingApogeeFallingTime = 0;
     changeBuzzerIndication(400, 250);
 
-    stateSequence.getTimer().every(1, waitingApogee, (void*)((unsigned long)1));
+    // stateSequence.getTimer().every(1, waitingApogee, (void*)((unsigned long)1));
+    toNextState();
 }
 
 bool waitingApogee(void* codedDelay) {
@@ -82,22 +87,80 @@ bool waitingApogee(void* codedDelay) {
 }
 
 void activateExecutables() {
+    setupExecutables();
     changeBuzzerIndication(0);
-    activateServos();
 
-    Serial.println("activate executables");
-
-    stateSequence.getTimer().in(2000, [](void*) -> bool {
+    Serial.println("Activate executables");
+    
+    stateSequence.getTimer().in(SERVOS_ACTIVATION_DELAY,
+    [](void*) -> bool {
+        activateServos();
+        return true;
+    });
+    stateSequence.getTimer().in(SERVOS_ACTIVATION_DELAY + SERVOS_ACTIVATITY_TIME,
+    [](void*) -> bool {
         resetServos();
+        return true;
+    });
+
+    // Могут быть проблемы из-за отсутствия функции сброса только одного конкретного запала
+    if (ACTIVATE_FUSES_AFTER_REACHING_APOGEE) {
+        // ORDINARY_FUSE_1 ACT
+        stateSequence.getTimer().in(ORDINARY_FUSE_1_ACTIVATION_DELAY,
+        [](void) -> bool {
+            activateOneFuse(ORDINARY_FUSE_1_ID);
+            return true;
+        });
+        stateSequence.getTimer().in(ORDINARY_FUSE_1_ACTIVATION_DELAY + EACH_NOT_HEATING_FUSE_ACTIVATITY_TIME,
+        [](void) -> bool {
+            resetFuses();
+            return true;
+        });
+
+        // ORDINARY_FUSE_2 ACT
+        stateSequence.getTimer().in(ORDINARY_FUSE_2_ACTIVATION_DELAY,
+        [](void) -> bool {
+            activateOneFuse(ORDINARY_FUSE_2_ID);
+            return true;
+        });
+        stateSequence.getTimer().in(ORDINARY_FUSE_2_ACTIVATION_DELAY + EACH_NOT_HEATING_FUSE_ACTIVATITY_TIME,
+        [](void) -> bool {
+            resetFuses();
+            return true;
+        });
+
+        // HEATING_FUSE ACT
+        stateSequence.getTimer().in(HEATING_FUSE_ACTIVATION_DELAY,
+        [](void) -> bool {
+            activateOneFuse(HEATING_FUSE_1_ID);
+            return true;
+        });
+
+        // WARMED_FUSE ACT 
+        stateSequence.getTimer().in(HEATING_FUSE_ACTIVATION_DELAY + HEATING_FUSE_ACTIVATITY_TIME,
+        [](void) -> bool {
+            resetFuses();
+            activateOneFuse(WARMED_FUSE_ID);
+            return true;
+        });
+        stateSequence.getTimer().in(HEATING_FUSE_ACTIVATION_DELAY + HEATING_FUSE_ACTIVATITY_TIME + EACH_NOT_HEATING_FUSE_ACTIVATITY_TIME,
+        [](void) -> bool {
+            resetFuses();
+            return true;
+        });
+    }
+
+    stateSequence.getTimer().in(MAX_ACTIVATION_TIME, [](void*) -> bool {
+        resetServos();
+        resetFuses();
         toNextState();
-
-        Serial.println("deactivate executables");
-
         return true;
     });
 }
 
 void waitingLanding() {
+    Serial.println("Waiting landing");
+
     toNextState();
 }
 

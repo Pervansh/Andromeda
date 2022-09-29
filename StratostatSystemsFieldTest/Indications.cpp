@@ -4,7 +4,7 @@
 // Leds
 struct LedData {
   bool state = false;
-  bool colors[3];
+  uint8_t colors[3];
   int delta = 0;
   int count = 0;
   unsigned long timer = 0;
@@ -33,7 +33,7 @@ void changeBuzzerIndication(int buzTone, unsigned long buzDelta, int buzCount) {
   tone(BUZZER_PIN, buzzerTone);
 }
 
-void changeLedIndication(int ledNumber, bool rgbCls[3], unsigned long rgbDelta, int rgbCount) {
+void changeLedIndication(int ledNumber, uint8_t rgbCls[3], unsigned long rgbDelta, int rgbCount) {
   LedData& led = indicationLeds[ledNumber];
   led.colors[0] = rgbCls[0];
   led.colors[1] = rgbCls[1];
@@ -43,7 +43,7 @@ void changeLedIndication(int ledNumber, bool rgbCls[3], unsigned long rgbDelta, 
   led.timer = millis();
   led.state = true;
   
-  ledStrip.setPixelColor(ledNumber, 255 * rgbCls[0], 255 * rgbCls[1], 255 * rgbCls[2]);
+  ledStrip.setPixelColor(ledNumber, rgbCls[0], rgbCls[1], rgbCls[2]);
 }
 
 void indicate() {
@@ -69,9 +69,9 @@ void indicateWithLeds() {
     LedData& led = indicationLeds[i];
 
     if (millis() - led.timer >= led.delta && led.count != 0 && led.delta != 0) {
-      ledStrip.setPixelColor(i, 255 * (led.colors[0] && led.state),
-                                255 * (led.colors[1] && led.state),
-                                255 * (led.colors[2] && led.state));
+      ledStrip.setPixelColor(i, led.colors[0] * led.state,
+                                led.colors[1] * led.state,
+                                led.colors[2] * led.state);
 
       ledStrip.show();
 
