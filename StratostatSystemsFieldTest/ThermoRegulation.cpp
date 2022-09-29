@@ -27,9 +27,9 @@ void ThermoRegulator::regulate() {
     auto temp = ntc.getTempAverage();
     if (useRelay) {
       if (temp < pid.setpoint) {
-        output = 0;
-      } else {
         output = 100;
+      } else {
+        output = 0;
       }
 
     } else {

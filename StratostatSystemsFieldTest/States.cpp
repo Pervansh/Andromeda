@@ -10,6 +10,7 @@
 
 StateSequence stateSequence;
 Logger stateLogger;
+ThermoRegulator stateThermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C, true);
 
 bool isToNextState = false;
 
@@ -19,6 +20,10 @@ StateSequence& getStateSequence() {
 
 Logger&  getStateLogger() {
     return stateLogger;
+}
+
+ThermoRegulator& getStateThermoRegulator() {
+    return stateThermoRegulator;
 }
 
 bool toNextState(void*) {
@@ -32,11 +37,23 @@ void startStateSequence() {
 
 void statesTick() {
     stateSequence.getTimer().tick();
+    stateLogger.logOnTimer();
+    stateThermoRegulator.regulate();
 
     if (isToNextState) {
         stateSequence.toNext();
         isToNextState = false;
     }
+}
+
+bool turnOnStateThermoRegulator (void* = nullptr) {
+    stateThermoRegulator.turnOn();
+    return true;
+}
+
+bool turnOffStateThermoRegulator(void* = nullptr) {
+    stateThermoRegulator.turnOff();
+    return true;
 }
 
 namespace States {
@@ -59,6 +76,7 @@ void prelaunchWork() {
     Serial.println("Prelaunch works");
 
     stateSequence.getTimer().at(TOTALLY_LAUNCHED_AT, toNextState);
+    stateSequence.getTimer().at(TURN_ON_THERMOREGULATION_AT, turnOnStateThermoRegulator);
 }
 
 void launched() {
@@ -181,6 +199,7 @@ void onLanding() {
 }
 
 void landed() {
+    stateThermoRegulator.turnOff();
     changeBuzzerIndication(600, 1000);
     Serial.println("Landed");
 }
