@@ -44,6 +44,8 @@ void statesTick() {
     stateLogger.logOnTimer();
     stateThermoRegulator.regulate();
 
+    stateLoggerTimer.tick();
+
     if (isToNextState) {
         stateSequence.toNext();
         isToNextState = false;
