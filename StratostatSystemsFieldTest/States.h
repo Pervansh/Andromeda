@@ -17,7 +17,7 @@ void prelaunchWork();
 void launched();
 bool waitingApogee(void* codedDelay);
 void activateExecutables();
-void waitingLanding();
 void onLanding();
+void landed();
 
 }

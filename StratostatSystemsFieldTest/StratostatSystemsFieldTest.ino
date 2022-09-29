@@ -22,8 +22,8 @@ void setup() {
                       .addNext(States::prelaunchWork)
                       .addNext(States::launched)
                       .addNext(States::activateExecutables)
-                      .addNext(States::waitingLanding)
-                      .addNext(States::onLanding);
+                      .addNext(States::onLanding)
+                      .addNext(States::landed);
 
     logger.setLoggingDelay(LOGGING_MILLIS_DELAY);
 

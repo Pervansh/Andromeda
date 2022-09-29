@@ -48,21 +48,27 @@ void setupUp() {
     setupOrientationDetermination();
     setupExecutables();
 
+    Serial.println("Setup done well");
+
     toNextState();
 }
 
 void prelaunchWork() {
     changeBuzzerIndication(200, 1000);
 
-    stateSequence.getTimer().in(3000, toNextState);
+    Serial.println("Prelaunch works");
+
+    stateSequence.getTimer().at(TOTALLY_LAUNCHED_AT, toNextState);
 }
 
 void launched() {
     waitingApogeeFallingTime = 0;
     changeBuzzerIndication(400, 250);
 
-    // stateSequence.getTimer().every(1, waitingApogee, (void*)((unsigned long)1));
-    toNextState();
+    Serial.println("Launched");
+
+    stateSequence.getTimer().every(1, waitingApogee, (void*)((unsigned long)1));
+    Serial.println("Now waiting apogee");
 }
 
 bool waitingApogee(void* codedDelay) {
@@ -80,8 +86,6 @@ bool waitingApogee(void* codedDelay) {
     if (waitingApogeeFallingTime >= WAITING_APOGEE_TRIGGER_FALLING_TIME) {
         toNextState();
     }
-
-    Serial.println("Waiting apogee");
 
     return true;
 }
@@ -169,14 +173,16 @@ void activateExecutables() {
     });
 }
 
-void waitingLanding() {
-    Serial.println("Waiting landing");
+void onLanding() {
+    Serial.println("On landing");
+    changeBuzzerIndication(200, 2000, 3);
 
-    toNextState();
+    stateSequence.getTimer().in(TOTAL_LANDING_TIME, toNextState);
 }
 
-void onLanding() {
-    changeBuzzerIndication(500, 1000, 3);
+void landed() {
+    changeBuzzerIndication(600, 1000);
+    Serial.println("Landed");
 }
 
 }
