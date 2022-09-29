@@ -12,7 +12,7 @@ bool toNextState(void* = nullptr);
 void startStateSequence();
 void statesTick();
 
-bool startStateLogger (void* = nullptr);
+bool startStateLogger (void* number = nullptr);
 bool finishStateLogger(void* = nullptr);
 
 bool turnOnStateThermoRegulator (void* = nullptr);

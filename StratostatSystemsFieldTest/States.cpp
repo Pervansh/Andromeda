@@ -1,3 +1,4 @@
+#include "core_pins.h"
 #include "States.h"
 
 #include <Arduino.h>
@@ -11,6 +12,9 @@
 StateSequence stateSequence;
 Logger stateLogger;
 ThermoRegulator stateThermoRegulator(NEEDED_THERMOREGULATOR_TEMP_C, true);
+
+Timer<1, millis> stateLoggerTimer;
+size_t startStateLoggerCallCount = 0;
 
 bool isToNextState = false;
 
@@ -46,12 +50,25 @@ void statesTick() {
     }
 }
 
-bool turnOnStateThermoRegulator (void* = nullptr) {
+bool startStateLogger (void* number) {
+    auto fileName = LOGGING_FILE_NAME;
+    int postfixNumber = MILLIS_TO_MINUTES(startStateLoggerCallCount * LOG_NEW_FILE_CREATION_EVERY);
+    stateLogger.startLogging(String(fileName) + "-" + String((unsigned long)postfixNumber));
+    startStateLoggerCallCount++;
+    return true;
+}
+
+bool finishStateLogger(void*) {
+    stateLogger.finishLogging();
+    return true;
+}
+
+bool turnOnStateThermoRegulator (void*) {
     stateThermoRegulator.turnOn();
     return true;
 }
 
-bool turnOffStateThermoRegulator(void* = nullptr) {
+bool turnOffStateThermoRegulator(void*) {
     stateThermoRegulator.turnOff();
     return true;
 }
@@ -66,6 +83,12 @@ void setupUp() {
     setupExecutables();
 
     Serial.println("Setup done well");
+
+    startStateLogger();
+    stateLoggerTimer.every(LOG_NEW_FILE_CREATION_EVERY, [](void*) -> bool {
+        finishStateLogger();
+        startStateLogger();
+    });
 
     toNextState();
 }
@@ -200,6 +223,10 @@ void onLanding() {
 
 void landed() {
     stateThermoRegulator.turnOff();
+
+    stateLoggerTimer.cancel();
+    finishStateLogger();
+
     changeBuzzerIndication(600, 1000);
     Serial.println("Landed");
 }

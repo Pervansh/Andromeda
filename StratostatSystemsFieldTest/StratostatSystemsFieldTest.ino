@@ -44,7 +44,7 @@ void setup() {
 
     logger.startLogging(sessionCode + ".txt");
 
-    // startStateSequence();
+    startStateSequence();
 }
 
 void loop() {

@@ -16,6 +16,7 @@
 #endif
 
 #define MINUTES_TO_MILLIS(minutes)     60000 * minutes
+#define MILLIS_TO_MINUTES(millis)      millis / 60000
 
 #define PARAMETER(name, value)         constexpr auto name = value;
 #define ARRAY(name, type, count, data) constexpr type name[ count ] = { data }; constexpr uint8_t name##_SIZE = count;
