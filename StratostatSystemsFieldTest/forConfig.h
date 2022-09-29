@@ -15,6 +15,8 @@
   #define BUILTIN_SDCARD 10
 #endif
 
+#define MINUTES_TO_MILLIS(minutes)     60000 * minutes
+
 #define PARAMETER(name, value)         constexpr auto name = value;
 #define ARRAY(name, type, count, data) constexpr type name[ count ] = { data }; constexpr uint8_t name##_SIZE = count;
 #define ARRAY_SIZE(name)               name##_SIZE

@@ -9,7 +9,9 @@ float getCarbonTemperature() {
   return carbonNtc.getTempAverage();
 }
 
-ThermoRegulator::ThermoRegulator(float neededTempC) {
+ThermoRegulator::ThermoRegulator(float neededTempC, bool _useRelay = false) : useRelay(_useRelay) {
+  changeNeededTemperature(neededTempC);
+  
   pid.setLimits(0, 255);
   pid.setDirection(THERMOREGULATOR_PID_DIRECTION);
 
@@ -22,8 +24,18 @@ void ThermoRegulator::regulate() {
   int output;
   
   if (isTurnedOn) {
-    pid.input = ntc.getTempAverage();
-    output = pid.getResultNow();
+    auto temp = ntc.getTempAverage();
+    if (useRelay) {
+      if (temp < pid.setpoint) {
+        output = 0;
+      } else {
+        output = 100;
+      }
+
+    } else {
+      pid.input = temp;
+      output = pid.getResultNow();
+    }
   } else {
     output = 0;
   }

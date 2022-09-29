@@ -15,9 +15,10 @@ private:
   GyverPID pid = GyverPID(PID_COEFFICIENTS[0], PID_COEFFICIENTS[1], PID_COEFFICIENTS[2]);
   GyverNTC ntc = GyverNTC(THERMOREGULATION_THERMISTOR_PIN, 10000, 3435);
   bool isTurnedOn;
+  bool useRelay;
 
 public:
-  ThermoRegulator(float neededTempC);
+  ThermoRegulator(float neededTempC, bool _useRelay = false);
 
   void regulate();
 
