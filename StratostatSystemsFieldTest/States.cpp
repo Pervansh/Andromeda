@@ -54,7 +54,7 @@ void statesTick() {
 
 bool startStateLogger (void* number) {
     auto fileName = LOGGING_FILE_NAME;
-    int postfixNumber = MILLIS_TO_MINUTES(startStateLoggerCallCount * LOG_NEW_FILE_CREATION_EVERY);
+    int postfixNumber = MILLIS_TO_MINUTES(startStateLoggerCallCount * NEW_LOG_FILE_CREATION_EVERY);
     stateLogger.startLogging(String(fileName) + "-" + String((unsigned long)postfixNumber) + ".txt");
     startStateLoggerCallCount++;
     return true;
@@ -84,13 +84,15 @@ void setupUp() {
     setupOrientationDetermination();
     setupExecutables();
 
-    Serial.println("Setup done well");
-
     startStateLogger();
-    stateLoggerTimer.every(LOG_NEW_FILE_CREATION_EVERY, [](void*) -> bool {
+    stateLoggerTimer.every(NEW_LOG_FILE_CREATION_EVERY, [](void*) -> bool {
         finishStateLogger();
         startStateLogger();
+        Serial.println("New log file has been created");
+        return true;
     });
+
+    Serial.println("Setup done well");
 
     toNextState();
 }
@@ -233,4 +235,4 @@ void landed() {
     Serial.println("Landed");
 }
 
-}
+}  // namespace States

@@ -8,8 +8,8 @@
 #include "States.h"
 #include "StateSequence.h"
 
-ThermoRegulator thermoRegulator = getStateThermoRegulator();
-Logger logger = getStateLogger();
+ThermoRegulator& thermoRegulator = getStateThermoRegulator();
+Logger& logger = getStateLogger();
 
 void setup() {
     Serial.begin(3600);
